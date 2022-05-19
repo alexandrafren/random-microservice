@@ -7,7 +7,6 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-
 # Method to Generate Random Numbers, takes in a Length, and the array to pass numbers back to
 def gen_nums(ln, return_arr):
     for i in range(0,ln):
@@ -27,6 +26,17 @@ def gen_letters(case, ln, return_arr):
     for i in alpha_arr:
         return_arr.append(i)
 
+# Method to calculate how many different char types will be in the string (max:4 upper, lower, symbols, numbers)
+def update_div_count(upper, lower, sym, nums, div_count):
+    if upper == "True" or upper == "true":
+        div_count += 1
+    if sym == "True" or sym == "true": 
+        div_count += 1
+    if nums == "True" or nums == "true":
+        div_count += 1
+    if lower == "True" or lower == "true":
+        div_count += 1
+    return div_count
 
 @app.route('/')
 def index():
@@ -50,14 +60,7 @@ def index():
             sym = request.args.get('sym')
         if request.args.get('length'):
             vol = int(request.args.get('length')) 
-    if upper == "True" or upper == "true":
-        div_count += 1
-    if sym == "True" or sym == "true": 
-        div_count += 1
-    if nums == "True" or nums == "true":
-        div_count += 1
-    if lower == "True" or lower == "true":
-        div_count += 1
+    div_count = update_div_count(upper, lower, sym, nums, div_count)
     # generate lowercase letters
     if lower == "True" or lower == "true":
         ln = trunc(vol / div_count)
